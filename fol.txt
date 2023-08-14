@@ -1,0 +1,262 @@
+person(Inmate)
+person(Guard)
+person(Warden)
+person(Transporter)
+person(Visitor)
+
+staff(Guard)
+staff(Guard_Dog)
+staff(Warden)
+
+security(Guard)
+security(Guard_Dog)
+
+job(Cook)
+job(Inventory_Management)
+job(Dishwasher)
+job(Janitor)
+job(Trash_Collector)
+job(Laundry_Worker)
+job(Tailor)
+job(Metal_Work)
+job(Wood_Work)
+job(Quality_Inspection)
+job(Librarian)
+job(Guard_Duty)
+
+job_category(Kitchen)
+job_category(Sanitation)
+job_category(Fabric)
+job_category(Workshop)
+job_category(Library)
+job_category(Security)
+
+location(Kitchen, inside)
+location(Dining_Area, inside)
+location(Gym, inside)
+location(Cell, inside)
+location(Courtyard, inside)
+location(Washing_Area, inside)
+location(Library, inside)
+location(Bath_Area, inside)
+location(Toilets, inside)
+location(Workshop, inside)
+location(Visiting_Area, inside)
+location(Generator_Room, inside)
+location(Activity_Area, inside)
+location(Sweatshop, inside)
+location(Garage, inside)
+location(Infirmary, inside)
+location(Shop, inside)
+location(Solitary_Confinement, inside)
+location(Warden_Office, inside)
+location(Sniper_Post, inside)
+location(Forest, outside)
+location(Dirt_road, outside)
+location(Sea, outside)
+location(Cliff, outside)
+location(Parking, outside)
+
+
+hasDoor(Activity_Area).
+hasDoor(Garage).
+
+schedule(Morning_Roll_Call, 0730, mandatory).
+schedule(Shower, 0800, optional).
+schedule(Breakfast, 0900, optional).
+schedule(Job_Period, 1000, mandatory).
+schedule(Lunch, 1330, optional).
+schedule(Job_Period, 1430, mandatory).
+schedule(Free_Period, 1630, optional).
+schedule(Exercise, 1800, optional).
+schedule(Shower, 1900, optional).
+schedule(Dinner, 1930, optional).
+schedule(Free_Period, 2030, optional).
+schedule(Evening_Roll_Call, 2130, mandatory).
+schedule(Lights_Out, 2200, optional).
+
+day(Weekday)
+day(Weekend)
+
+item(Toiletries, not_contraband)
+item(Inmate_Uniform, not_contraband)
+item(Job_Uniform, not_contraband)
+item(Shoes, not_contraband)
+item(Soap, not_contraband)
+item(Snacks, not_contraband)
+item(Flashlight, not_contraband)
+item(Wood_piece, contraband)
+item(Metal_sheet, contraband)
+item(Wire_Cutters, contraband)
+item(Pick_Axe, contraband)
+item(Showel, contraband)
+item(Gun,cntraband)
+item(Baton, contraband)
+item(Guard_Uniform, contraband)
+item(Cell_Key, contraband)
+item(Generator_Key, contraband)
+item(Compound_Key, contraband)
+
+generator(On)
+seen_escaping(Yes)
+seen_escaping(No)
+
+do(Cuts_Fence)
+do(digs)
+do(escapes)
+lockdown(yes)
+
+
+(job(Cook) V job(Inventory_Management) V job(Dishwasher)) ∧ person(Inmate)
+	-> job_category(Kitchen)
+
+(job(Dishwasher) V job(Janitor) V job(Trash_Collector)) ∧ person(Inmate)
+	-> job_category(Sanitation)
+
+(job(Laundry_Worker) V job(Tailor)) ∧ person(Inmate)
+	-> job_category(Fabric)
+
+(job(Metal_Work) V job(Wood_Work)) ∧ person(Inmate)
+	-> job_category(Workshop)
+
+job(Quality_Inspection) ∧ (person(Inmate) V person(Guard))
+	-> job_category(Kitchen) V 
+	job_category(Sanitation) V 
+	job_category(Fabric) V 
+	job_category(Workshop) V 
+	job_category(Library)
+
+job(Librarian) ∧ person(Inmate)
+	-> job_category(Library)
+
+job(Guard_Duty) ∧ person(Guard)
+	-> job_category(Security)
+
+(job(Cook) V job(Inventory_Management) V job(Dishwasher)) ∧ person(Inmate)
+	-> location(Kitchen, inside)
+
+(job(Janitor) V job(Trash_Collector) V job(Quality_Inspection)) ∧ (person(Inmate) V person(Guard))
+	-> location(Kitchen, inside) V 
+	location(Dining_Area, inside) V 
+	location(Cell, inside) V 
+	location(Courtyard, inside) V 
+	location(Washing_Area, inside) V 
+	location(Library, inside) V 
+	location(Bath_Area, inside) V 
+	location(Toilets, inside) V 
+	location(Workshop, inside) V 
+	location(Visiting_Area, inside) V 
+	location(Activity_Area, inside) V 
+	location(Sweatshop, inside) V 
+	location(Infirmary, inside) V 
+	location(Solitary_Confinement, inside)
+
+job(Laundry_Worker), person(Inmate)
+	-> location(Washing_Area, inside)
+
+job(Tailor), person(Inmate)
+	-> location(Sweatshop, inside)
+
+(job(Metal_Work) V job(Wood_Work)) ∧ person(Inmate)
+	-> location(Workshop, inside)
+
+job(Librarian) ∧ person(Inmate)
+	-> location(Library, inside)
+
+job(Guard_Duty) ∧ person(Guard)
+	-> location(Kitchen, inside) V 
+	location(Dining_Area, inside) V 
+	location(Gym, inside) V 
+	location(Cell, inside) V 
+	location(Courtyard, inside) V 
+	location(Washing_Area, inside) V 
+	location(Librar, inside) V 
+	location(Bath_Area, inside) V 
+	location(Toilets, inside) V 
+	location(Workshop, inside) V 
+	location(Visiting_Area, inside) V 
+	location(Generator_Room, inside) V 
+	location(Activity_Area, inside) V 
+	location(Sweatshop, inside) V 
+	location(Garage, inside) V 
+	location(Infirmary, inside) V 
+	location(Shop, inside) V 
+	location(Solitary_Confinement, inside) V 
+	location(Sniper_Post, inside) V 
+	location(Dirt_road, outside) V 
+	location(Parking, outside)
+
+day(Weekend) -> delivery(Yes)
+day(Weekday) -> delivery(No)
+
+location(Solitary_Confinement, inside)
+	:- item(X, contraband), person(Inmate).
+location(Visiting_Area, inside)
+	:- person(Inmate), person(Visitor).
+
+
+job(Metal_Work) -> item(Wire_Cutters, contraband)
+job(Wood_Work) -> item(Pick_Axe, contraband)
+job(Tailor) V job(Laundry_Worker) -> item(Guard_Uniform, contraband)
+
+item(Cell_Key, contraband) ∧ schedule(Lights_Out, 2200, optional) ∧ seen_escaping(No)
+	-> do(get_out_of_cell)
+
+item(Generator_Key, contraband) ∧ generator(On) ∧ seen_escaping(No) ∧ do(get_out_of_cell)
+	-> generator(Off) 	
+
+item(Wire_Cutters, contraband) ∧ item(Guard_Uniform, contraband) ∧ schedule(Lights_Out, 2200, optional) ∧  seen_escaping(No) ∧ generator(Off)
+	-> do(Cuts_Fence)	
+
+~schedule(Lights_Out, 2200, optional) V seen_escaping(Yes)
+	-> ~do(Cuts_Fence)
+
+item(Showel, contraband) ∧ item(Guard_Uniform, contraband) ∧ schedule(Lights_Out, 2200, optional) ∧ 	seen_escaping(No)
+	-> do(digs)
+
+do(digs) ∧ do(Cuts_Fence) 
+	-> do(escapes)
+ 
+~do(digs) V ~do(Cuts_Fence)
+	-> ~do(escapes)
+
+~do(escapes) ∧ seen_escaping(Yes) ∧	person(Guard) ∧ ~location(Sniper_Post, inside)
+	-> location(Solitary_Confinement, inside)
+
+~do(escapes) ∧ seen_escaping(Yes) ∧	person(Guard) ∧ ~location(Sniper_Post, inside)
+	-> do(dies)
+
+do(Cuts_Fence) ∧ generator(On)
+	-> do(dies)
+
+
+######### realations #########
+∀X,Y person(Inmate), job(X), schedule(Job_Period, Y, mandatory)
+	-> do(job(X))
+
+∀X, Y person(X) ∧ job(Y)
+	-> has_to_work_as(X, Y)
+
+∀X, Y staff(X) ∧ staff(Y)
+	-> accompanies(X, Y)
+
+∀X, ∃Y schedule(X, Y, mandatory)
+	-> lockdown(yes)
+	
+∀X person(Inmate), location(X, outside)
+	-> lockdown(yes)
+
+∀X hasDoor(X), person(Inmate)
+	-> person(Guard) ∧ location(X, inside) ∧ job(Guard_Duty)
+
+∀X, Y job(X) ∧ job(Y)
+	-> change_job(X, Y)
+
+∃X, ∃Y change_job(X, Y) ∧ job(X) ∧ X =\= Y
+	-> job(Y)
+
+∀X person(X) ∧ (schedule(Breakfast, 0900, optional) V
+schedule(Lunch, 1330, optional) V
+schedule(Dinner, 1930, optional))
+	-> do(eat)
+
